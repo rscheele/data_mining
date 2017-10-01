@@ -1,101 +1,46 @@
 import numpy as np
 import scipy.io as spio
+import scipy.stats as spst
 import matplotlib.pyplot as plt
 
-mat = spio.loadmat('wine.mat',squeeze_me=True)
+mat = spio.loadmat('Data\wine.mat',squeeze_me=True)
 data = np.array(mat['X'])
+#data = spst.zscore(data)
 
-'''plt.subplot(431)
-plt.hist(data[:, 0],bins=100)
-plt.xlabel('Fixed acidity (tartaric) g/dm3')
-plt.ylabel('Count')
-plt.title('Count of fixed acidity (tartaric)')
-plt.grid(True)
+label_count = 'Count'
+label_attribute = ['Fixed acidity (tartaric g/dm3','Volatile acidity (acetic) g/dm3','Citric acid g/dm3',
+          'Residual sugar g/dm3','Chlorides g/dm3','Free sulfur dioxide mg/dm3','Total sulfur dioxide mg/dm3',
+          'Density g/cm3','pH','Sulphates g/dm3','Alcohol %','Quality score 1-10']
+label_title_hist = ['Count of fixed acidity (tartaric)','Count of volatile acidity (acetic)','Count of citric acid',
+             'Count of residual sugar','Count of chlorides','Count of free sulfur dioxide','Count of total sulfur dioxide',
+             'Count of density','Count of pH','Count of sulphates','Count alcohol %','Count of scores']
+label_title_box = ['Boxplot for fixed acidity (tartaric)','Boxplot for volatile acidity (acetic)','Boxplot for citric acid',
+             'Boxplot for residual sugar','Boxplot for chlorides','Boxplot for free sulfur dioxide','Boxplot for total sulfur dioxide',
+             'Boxplot for density','Boxplot for pH','Boxplot for sulphates','Boxplot for alcohol %','Boxplot for scores']
 
-plt.subplot(432)
-plt.hist(data[:, 1],bins=100)
-plt.xlabel('Volatile acidity (acetic) g/dm3')
-plt.ylabel('Count')
-plt.title('Count of volatile acidity (acetic)')
-plt.grid(True)
-
-plt.subplot(433)
-plt.hist(data[:, 2],bins=100)
-plt.xlabel('Citric acid g/dm3')
-plt.ylabel('Count')
-plt.title('Count of citric acid')
-plt.grid(True)
-
-plt.subplot(434)
-plt.hist(data[:, 3],bins=100)
-plt.xlabel('Residual sugar g/dm3')
-plt.ylabel('Count')
-plt.title('Count of residual sugar')
-plt.grid(True)
-
-plt.subplot(435)
-plt.hist(data[:, 4],bins=100)
-plt.xlabel('Chlorides g/dm3')
-plt.ylabel('Count')
-plt.title('Count of chlorides')
-plt.grid(True)
-
-plt.subplot(436)
-plt.hist(data[:, 5],bins=100)
-plt.xlabel('Free sulfur dioxide mg/dm3')
-plt.ylabel('Count')
-plt.title('Count of free sulfur dioxide')
-plt.grid(True)
-
-plt.subplot(437)
-plt.hist(data[:, 6],bins=100)
-plt.xlabel('Total sulfur dioxide mg/dm3')
-plt.ylabel('Count')
-plt.title('Count of total sulfur dioxide')
-plt.grid(True)
-
-plt.subplot(438)
-plt.hist(data[:, 7],bins=100)
-plt.xlabel('Density g/cm3')
-plt.ylabel('Count')
-plt.title('Count of density')
-plt.grid(True)
-
-plt.subplot(439)
-plt.hist(data[:, 8],bins=100)
-plt.xlabel('pH')
-plt.ylabel('Count')
-plt.title('Count of pH')
-plt.grid(True)
-
-plt.subplot(4,3,10)
-plt.hist(data[:, 9],bins=100)
-plt.xlabel('Sulphates g/dm3')
-plt.ylabel('Count')
-plt.title('Count of sulphates')
-plt.grid(True)
-
-plt.subplot(4,3,11)
-plt.hist(data[:, 10],bins=100)
-plt.xlabel('Alcohol %')
-plt.ylabel('Count')
-plt.title('Count alcohol %')
-plt.grid(True)
-
-plt.subplot(4,3,12)
-plt.hist(data[:, 11],bins=100)
-plt.xlabel('Quality score 1-10')
-plt.ylabel('Count')
-plt.title('Count of scores')
-plt.grid(True)
-
+plt.figure(figsize=(15,8))
+plt.hold = True
+for i in range(0,12):
+    plt.subplot(4,3,i+1)
+    plt.ylabel(label_count)
+    plt.xlabel(label_attribute[i])
+    plt.title(label_title_hist[i])
+    plt.hist(data[:,i],bins=100)
+    plt.grid(True)
 plt.subplots_adjust(hspace=.7)
-plt.show()'''
 
-plt.boxplot(data[:, 0])
-plt.xlabel('Fixed acidity (tartaric) g/dm3')
-plt.ylabel('Count')
-plt.title('Count of fixed acidity (tartaric)')
-plt.grid(True)
+plt.figure(figsize=(15,8))
+plt.hold = True
+for i in range(0,12):
+    plt.subplot(4,3,i+1)
+    plt.xlabel(label_attribute[i])
+    plt.title(label_title_box[i])
+    plt.boxplot(data[:,i],vert=False)
+    plt.grid(True)
+plt.subplots_adjust(hspace=.7)
 
 plt.show()
+
+data[:,3]
+data[:,7]
+data[:,10]
