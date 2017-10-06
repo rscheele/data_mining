@@ -39,8 +39,31 @@ for i in range(0,12):
     plt.grid(True)
 plt.subplots_adjust(hspace=.7)
 
-plt.show()
+def reject_outliers(array):
+    array = array[abs(array[:,1]) < 20]
+    array = array[abs(array[:,7]) < 10]
+    array = array[abs(array[:,10]) < 200]
+    return array
 
-data[:,3]
-data[:,7]
-data[:,10]
+data = reject_outliers(data)
+
+plt.figure(figsize=(15,8))
+plt.hold = True
+j = 1;
+for i in (1,7,10):
+    plt.subplot(3,2,j)
+    j = j+1
+    plt.boxplot(data[:,i],vert=False)
+    plt.xlabel(label_attribute[i])
+    plt.title(label_title_box[i])
+    plt.grid(True)
+    plt.subplot(3,2,j)
+    j = j+1
+    plt.hist(data[:,i],bins=100)
+    plt.xlabel(label_attribute[i])
+    plt.title(label_title_hist[i])
+    plt.ylabel(label_count)
+    plt.grid(True)
+plt.subplots_adjust(hspace=.7)
+
+plt.show()
