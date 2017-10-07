@@ -15,16 +15,20 @@ u = X.mean(axis=1) #Mean of the data rows
 Y = X - u[:, np.newaxis] #Centered matrix
 
 #C = Y.T.dot(Y)/(X.shape[0]-1) #Covariance Matrix example
-#C = np.cov(Y) #Covariance Matrix lazy way
-#L, V = np.linalg.eig(C) #Eigenvalues and vectors
+C = np.cov(Y) #Covariance Matrix lazy way
+L, V = np.linalg.eig(C) #Eigenvalues and vectors
 
 u, s, v = np.linalg.svd(Y)
 
+print L
+print 'next'
+print v
+
 Z = Y * v[:,1]
 
-plt.plot(Z, 'ro')
+'''plt.plot(Z, 'ro')
 plt.xlabel('PC0')
 plt.ylabel('PC1')
 plt.grid(True)
 plt.title('Principal Component Analysis PC0 and PC1')
-plt.show()
+plt.show()'''
