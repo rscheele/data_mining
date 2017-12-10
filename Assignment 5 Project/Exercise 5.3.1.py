@@ -19,3 +19,7 @@ print 'Confidence {B->A} = ' + str(conf_ba*100) + '%'
 '''
 lift_ab = sup_ab / (sup_a * sup_b)
 print 'Lift {A->B} = ' + str(lift_ab*100) + '%'
+
+pa = 0
+pb = 0
+pab = 0
