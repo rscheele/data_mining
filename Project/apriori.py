@@ -1,3 +1,4 @@
 import pandas as pd
+import apriorimining as am
 
-data = pd.read_excel('Data/D01_transactions.xls', header=0,index_col=0)
+am.generate_association_rules()

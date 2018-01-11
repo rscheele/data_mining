@@ -12,19 +12,7 @@ def start():
     confidence = int(input("Please enter confidence value in %: "))
     maxr = int(input("Enter the max number of rules you want to see (enter 0 to see all rules): "))
     filename = raw_input("Please enter filepath\\filename and extension: ")
-    name = False
-    Names = {}
-    if("MovieLensData.txt" in filename):
-        printNames = raw_input("Do you want to print sets and rules with Movie names in stead of numbers? [y/n]: ")
-        if(printNames.lower() in ['y','yes','yeah','yep','i guess that would be nice']):
-            name = True
-            itemfile = 'Toolbox\\u.item'
-            with open(itemfile, "r") as f:
-                for line in f:
-                    split = line.split('|')[:2]
-                    Names[split[0]] = split[1]
-                        
-        
+
     """Compute candidate 1-itemset"""
     C1 = {}
     """total number of transactions contained in the file"""
@@ -37,24 +25,12 @@ def start():
             transactions += 1
             for word in line.split(','):
                 word = word.rstrip()
-                
-                #Use movie names
-                if(name):
-                    T.append(Names[word])
-                    if Names[word] not in C1.keys():
-                        C1[Names[word]] = 1
-                    else:
-                        count = C1[Names[word]]
-                        C1[Names[word]] = count + 1
-                          
-                #Don't use movie names
+                T.append(word)
+                if word not in C1.keys():
+                    C1[word] = 1
                 else:
-                    T.append(word)
-                    if word not in C1.keys():
-                        C1[word] = 1
-                    else:
-                        count = C1[word]
-                        C1[word] = count + 1
+                    count = C1[word]
+                    C1[word] = count + 1
             D.append(T)
 
     """Compute frequent 1-itemset"""

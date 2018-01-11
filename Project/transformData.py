@@ -8,7 +8,7 @@ groupedData = np.asmatrix(D01.groupby(['DateTime','CustomerID']))
 transationData = []
 print groupedData.item(1)
 
-for i in range(0,groupedData.shape[0]*2):
+for i in range(0,10000):
     transaction = np.asmatrix(groupedData.item(i))
     if transaction.shape[1] == 4:
         list = []
@@ -17,4 +17,6 @@ for i in range(0,groupedData.shape[0]*2):
         transationData.append(list)
 
 df = pd.DataFrame(transationData)
-df.to_excel('Data/D01_transactions.xls')
+#df.to_excel('Data/D01_transactions.xls',header=None,index=None)
+#df.to_csv('Data/D01_transactions.csv',header=None,index=None)
+np.savetxt('Data/D01_transactions.txt', transationData, fmt='%s')
