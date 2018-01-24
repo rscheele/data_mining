@@ -1,5 +1,0 @@
-5000 transactions takes 19.060000
-15000 transactions takes 75.356000
-29901 transactions takes 220.242000
-60952 transactions takes 570.050000
-119578 transactions takes 1451.836000

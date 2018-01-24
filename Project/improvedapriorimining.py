@@ -1,21 +1,14 @@
-# Based on script by github user nalinaksh 
-# Adapted by Lisa Tostrams (august 2017)
-# Adapted by Rodi Scheele (janauri 2018)
 from __future__ import print_function
 
 import itertools
 
-"""generate_association_rules function to mine and print all the association rules with given min support and confidence value"""
-def generate_association_rules(filename, support, confidence, maxr):
-    """1) Compute frequent 1-itemset"""
+def improved_apriori(filename, support, confidence, maxr):
     # L1 = All frequent 1 itemsets > Support
     # D = All transactions
     L1, D, transactions = frequent_1_itemsets(filename, support)
-
-    freq_itemsets(L1, support)
+    L = freq_itemsets(L1, support)
     return 0
 
-''' 1) Frequent 1 itemsets '''
 def frequent_1_itemsets(filename, support):
     print("test")
     C1 = {} #item, it's transactions
@@ -46,10 +39,10 @@ def frequent_1_itemsets(filename, support):
 
     L1.sort(key=lambda s:s[2],reverse=True)
 
-    ''''print("---------------TOP 10 FREQUENT 1-ITEMSET-------------------------")
+    print("---------------TOP 10 FREQUENT 1-ITEMSET-------------------------")
     for i in range(0,10):
         print('Item ID=' + str(L1[i][0]) + ' Supp=' + str(L1[i][2]))
-    print("-----------------------------------------------------------------")'''''
+    print("-----------------------------------------------------------------")
 
     return (L1, D, transactions)
 
@@ -57,6 +50,7 @@ def freq_itemsets(L1, support):
     k = 2
     support = 10
     Lk = []
+    L = []
 
     while True:
         Ck = list(itertools.combinations(L1, k))
@@ -67,6 +61,7 @@ def freq_itemsets(L1, support):
             idList = []
             s = 0
             for j in range(0, len(Ck[i])):
+                idList.append(Ck[i][j][0])
                 transactionlist.append(Ck[i][j][1])
             s = len(set(transactionlist[0]).intersection(*transactionlist[1:]))
             if (s >= support):
@@ -74,9 +69,22 @@ def freq_itemsets(L1, support):
                 for m in range(0, len(Ck[i])):
                     if Ck[i][m] not in L1:
                         L1.append(Ck[i][m])
+        L.append(Lk)
+        Lk = []
         if L1 == []:
             break
         k += 1
 
-    for i in range(0,len(Lk)):
-        print(Lk[i])
+    p = 2
+    for i in range(0,len(L)-1):
+        L[i].sort(key=lambda s:s[1],reverse=True)
+        if len(L[i]) > 10:
+            k = 10
+        else:
+            k = len(L[i])
+        print("---------------TOP 10 FREQUENT %d-ITEMSET-------------------------" % p)
+        for j in range(0,k):
+            print('Item ID=' + str(L[i][j][0]) + ' Supp=' + str(L[i][j][1]))
+        print("-----------------------------------------------------------------")
+        p+=1
+    return L
