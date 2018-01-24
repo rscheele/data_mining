@@ -10,7 +10,6 @@ def improved_apriori(filename, support, confidence, maxr):
     return 0
 
 def frequent_1_itemsets(filename, support):
-    print("test")
     C1 = {} #item, it's transactions
     """total number of transactions contained in the file"""
     transactions = 0 #total number of transactions to calculate support
@@ -55,7 +54,6 @@ def freq_itemsets(L1, support):
     while True:
         Ck = list(itertools.combinations(L1, k))
         L1 = []
-
         for i in range(0, len(Ck)):
             transactionlist = []
             idList = []
@@ -87,4 +85,4 @@ def freq_itemsets(L1, support):
             print('Item ID=' + str(L[i][j][0]) + ' Supp=' + str(L[i][j][1]))
         print("-----------------------------------------------------------------")
         p+=1
-    return L
+    return Lk_all
