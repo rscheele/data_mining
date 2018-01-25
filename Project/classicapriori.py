@@ -1,6 +1,5 @@
-# Based on script by github user nalinaksh 
-# Adapted by Lisa Tostrams (august 2017)
-# Adapted by Rodi Scheele (janauri 2018)
+# Based on script by github user nalinaksh adaptation by Lisa Tostrams (august 2017)
+# Written by Rodi Scheele (Januari 2018)
 from __future__ import print_function
 
 import itertools

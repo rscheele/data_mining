@@ -508,18 +508,18 @@ Item ID=[' 4710011401128L', ' 4710011405133L', ' 4710011401135L', ' 471001140905
 Item ID=[' 4710011401128L', ' 4710011405133L', ' 4710011401135L', ' 4710011409056L', ' 4711258001256L'] Supp=10
 -----------------------------------------------------------------
 ---------------CLASSIC APRIORI-------------------------
-5000 transactions takes 34.044000
-15000 transactions takes 87.566000
-29901 transactions takes 323.088000
-60952 transactions takes 1006.665000
-119578 transactions takes 3629.248000
+5000 transactions takes 34.907000
+15000 transactions takes 88.349000
+29901 transactions takes 322.601000
+60952 transactions takes 1002.908000
+119578 transactions takes 3643.003000
 -----------------------------------------------------------------
 ---------------IMPROVED APRIORI-------------------------
-5000 transactions takes 4.550000
-15000 transactions takes 30.418000
-29901 transactions takes -12.544000
-60952 transactions takes 375.686000
-119578 transactions takes 1035.972000
+5000 transactions takes 4.575000
+15000 transactions takes 30.559000
+29901 transactions takes 113.104000
+60952 transactions takes 377.680000
+119578 transactions takes 1039.632000
 -----------------------------------------------------------------
 
 Process finished with exit code 0

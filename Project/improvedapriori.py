@@ -1,3 +1,4 @@
+# Written by Rodi Scheele (Januari 2018)
 from __future__ import print_function
 
 import itertools
@@ -15,6 +16,7 @@ def frequent_1_itemsets(filename, support):
     transactions = 0 #total number of transactions to calculate support
     D = [] # List of all transactions
     T = [] # list of transactions with item occurence
+    # Add all the transactions to a big list with the item as ID and a list of transactions it occurs in
     with open(filename, "r") as f:
         for line in f:
             T = []
@@ -29,7 +31,7 @@ def frequent_1_itemsets(filename, support):
             transactions += 1
             D.append(T)
 
-    L1=[] #C1 with low support items removed
+    L1=[] # Contains item ID, transactions and support where items with < support are pruned
     for key in C1.keys():
         if round(100.0 * len(C1[key]) / transactions, 2) >= support:
             sup = round(100.0 * len(C1[key]) / transactions, 2)
@@ -37,7 +39,7 @@ def frequent_1_itemsets(filename, support):
             L1.append(transaction)
 
     L1.sort(key=lambda s:s[2],reverse=True)
-
+    # printing things
     print("---------------TOP 10 FREQUENT 1-ITEMSET-------------------------")
     for i in range(0,10):
         print('Item ID=' + str(L1[i][0]) + ' Supp=' + str(L1[i][2]))
@@ -47,33 +49,33 @@ def frequent_1_itemsets(filename, support):
 
 def freq_itemsets(L1, support):
     k = 2
-    support = 10
+    support = 10 # hardcoded for this dataset
     Lk = []
-    L = []
+    L = [] # contain a set for each k-size itemset, each set for the k contains all k-size itemsets
 
     while True:
         Ck = list(itertools.combinations(L1, k))
-        L1 = []
+        L1 = [] # L1 and Lk need to be emptied for (possible) next cycle
         for i in range(0, len(Ck)):
             transactionlist = []
             idList = []
             s = 0
-            for j in range(0, len(Ck[i])):
+            for j in range(0, len(Ck[i])): # For each itemset in candidate itemset
                 idList.append(Ck[i][j][0])
                 transactionlist.append(Ck[i][j][1])
-            s = len(set(transactionlist[0]).intersection(*transactionlist[1:]))
-            if (s >= support):
+            s = len(set(transactionlist[0]).intersection(*transactionlist[1:])) # Check for intersection between all transactions for each candidate itemset
+            if (s >= support): # If number of intersections > support it is added to frequent k-size itemset
                 Lk.append((idList,s))
                 for m in range(0, len(Ck[i])):
                     if Ck[i][m] not in L1:
-                        L1.append(Ck[i][m])
-        L.append(Lk)
-        Lk = []
-        if L1 == []:
+                        L1.append(Ck[i][m]) # create a new L1 for only items in k-size itemsets
+        L.append(Lk) # add all k-size itemsets to a set that contains a set for each k
+        Lk = [] # L1 and Lk need to be emptied for (possible) next cycle
+        if L1 == []: # if none k-size itemsets were found break out of the loop
             break
         k += 1
 
-    p = 2
+    p = 2 #printing things
     for i in range(0,len(L)-1):
         L[i].sort(key=lambda s:s[1],reverse=True)
         if len(L[i]) > 10:
@@ -85,4 +87,4 @@ def freq_itemsets(L1, support):
             print('Item ID=' + str(L[i][j][0]) + ' Supp=' + str(L[i][j][1]))
         print("-----------------------------------------------------------------")
         p+=1
-    return Lk_all
+    return L
