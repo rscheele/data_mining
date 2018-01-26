@@ -1,5 +1,5 @@
 from time import time
-import classicapriori as ap
+import classicaprioripersonal as ap
 import improvedapriori as iap
 import furtherimprovedapriori as fiap
 
@@ -71,4 +71,3 @@ print('29901 transactions takes %f' %(t13-t12))
 print('60952 transactions takes %f' %(t14-t13))
 print('119578 transactions takes %f' %(t15-t14))
 print("-----------------------------------------------------------------")
-
