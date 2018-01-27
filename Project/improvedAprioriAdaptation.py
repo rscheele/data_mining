@@ -3,70 +3,70 @@ from __future__ import print_function
 
 import itertools
 
-def classic_apriori(filename, support, confidence, maxr):
+def improved_apriori_adaptation(filename, support, confidence, maxr):
     # L1 = All frequent 1 itemsets > Support
     # D = All transactions
     L1, D, transactions = frequent_1_itemsets(filename, support)
-    L = freq_itemsets(L1, support, D)
+    L = freq_itemsets(L1, support)
     return 0
 
 def frequent_1_itemsets(filename, support):
     C1 = {} #item, it's transactions
-    transactions = 0 # total amount of transactions
+    """total number of transactions contained in the file"""
+    transactions = 0 #total number of transactions to calculate support
     D = [] # List of all transactions
     T = [] # list of transactions with item occurence
+    # Add all the transactions to a big list with the item as ID and a list of transactions it occurs in
     with open(filename, "r") as f:
         for line in f:
             T = []
-            transactions += 1
             for word in line.split(','):
                 word = word.rstrip()
                 T.append(word)
                 if word not in C1.keys():
-                    C1[word] = 1
+                    C1[word] = [transactions]
                 else:
-                    count = C1[word]
-                    C1[word] = count + 1
+                    C1[word].append(transactions)
+
+            transactions += 1
             D.append(T)
 
-    L1=[] #C1 with low support items removed
-    for key in C1:
-        C1sup = round(100.0 * C1[key] / transactions, 2)
-        if C1sup >= support:
-            item = (key, C1sup)
-            L1.append(item)
+    L1=[] # Contains item ID, transactions and support where items with < support are pruned
+    for key in C1.keys():
+        if round(100.0 * len(C1[key]) / transactions, 2) >= support:
+            sup = round(100.0 * len(C1[key]) / transactions, 2)
+            transaction = (key, C1[key], sup)
+            L1.append(transaction)
 
-    L1.sort(key=lambda s:s[1],reverse=True)
-
+    L1.sort(key=lambda s:s[2],reverse=True)
+    # printing things
     print("---------------TOP 10 FREQUENT 1-ITEMSET-------------------------")
     for i in range(0,10):
-        print('Item ID=' + str(L1[i][0]) + ' Supp=' + str(L1[i][1]))
+        print('Item ID=' + str(L1[i][0]) + ' Supp=' + str(L1[i][2]))
     print("-----------------------------------------------------------------")
 
-    L1_nosupp = [] # remove support values from L1, just keep ID's
-    for i in L1:
-        L1_nosupp.append(i[0])
+    return (L1, D, transactions)
 
-    return (L1_nosupp, D, transactions)
-
-def freq_itemsets(L1, support, D):
+def freq_itemsets(L1, support):
     k = 2
     support = 10 # hardcoded for this dataset
     Lk = []
     L = [] # contain a set for each k-size itemset, each set for the k contains all k-size itemsets
 
     while True:
-        # Create all possible itemsets with L1 or Lk-1
+        # Create all possible itemsets with L1
         Ckc = list(itertools.combinations(L1, k))
-
         # Prune itemsets in Ck that were not in Lk-1 if Lk > 1, otherwise don't prune
         Ck = []
         if k > 2:
             for c in Ckc: # For each item in our candidate itemset
+                ids = []
                 b = False
-                z = set(c)
+                for i in c: # Create a list of item ids from the candidate
+                    ids.append(i[0])
+                z = set(ids)
                 for l in Lk: # For each itemset from our previous k-1 itemset check if the candidate has it as subset
-                    x = set(l)
+                    x = set(l[0])
                     if x.issubset(z): # Check if the k candidate itemset has a subset somewhere in k-1 itemsets
                         b = True
                         break # No need to scan any further if a subset was found, save some processing power
@@ -77,30 +77,29 @@ def freq_itemsets(L1, support, D):
 
         L1 = [] # L1 and Lk need to be emptied for (possible) next cycle
         Lk = []
-        Lk_supp = []
 
-        for i in Ck: # For each itemset in candidate itemset
+        for i in range(0, len(Ck)): # For each itemset in candidate itemset
+            transactionlist = []
+            idList = []
             s = 0
-            c = set(i) #candidate
-            for T in D:
-                t = set(T)
-                if c.issubset(t):
-                    s+=1
+            for j in range(0, len(Ck[i])): # Create seperate list with id's and transactions
+                idList.append(Ck[i][j][0])
+                transactionlist.append(Ck[i][j][1])
+            s = len(set(transactionlist[0]).intersection(*transactionlist[1:])) # Check for intersection between all transactions for each candidate itemset
             if (s >= support): # If number of intersections > support it is added to frequent k-size itemset
-                Lk_supp.append((i,s))
-                Lk.append(i)
-                for m in i:
-                    if m not in L1:
-                        L1.append(m) # create a new L1 for only items in k-size itemsets
-
-        if Lk == []: # if none k-size itemsets were found break out of the loop
+                Lk.append((idList,s))
+                for m in range(0, len(Ck[i])):
+                    if Ck[i][m] not in L1:
+                        L1.append(Ck[i][m]) # create a new L1 for only items in k-size itemsets
+        L.append(Lk) # add all k-size itemsets to a set that contains a set for each k
+        support = 10 * (k - 1)
+        k += 1
+        if L1 == []: # if none k-size itemsets were found break out of the loop
+            Lk = []
             break
-        else:
-            k += 1
-            L.append(Lk_supp)  # add all k-size itemsets to a set that contains a set for each k
 
     p = 2 #printing things
-    for i in range(0,len(L)):
+    for i in range(0,len(L)-1):
         L[i].sort(key=lambda s:s[1],reverse=True)
         if len(L[i]) > 10:
             k = 10
@@ -112,6 +111,3 @@ def freq_itemsets(L1, support, D):
         print("-----------------------------------------------------------------")
         p+=1
     return L
-
-
-

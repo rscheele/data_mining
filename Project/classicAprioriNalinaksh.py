@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import itertools
 
-def classic_apriori(filename, support, confidence, maxr):
+def classic_apriori_nalinaksh(filename, support, confidence, maxr):
     # L1 = All frequent 1 itemsets > Support
     # D = All transactions
     L1, D, transactions = frequent_1_itemsets(filename, support)
@@ -82,6 +82,7 @@ def freq_itemsets(L1, support, D):
             print("------------------------------------------------------------------")
         for l in Lk:
             Lk_1.append(l[0])
+        support = 10 * (k - 1)
         k += 1
         if Lk != []:
             L.append(Lk)

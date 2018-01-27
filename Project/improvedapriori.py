@@ -73,6 +73,7 @@ def freq_itemsets(L1, support):
         Lk = [] # L1 and Lk need to be emptied for (possible) next cycle
         if L1 == []: # if none k-size itemsets were found break out of the loop
             break
+        support = 10 * (k - 1)
         k += 1
 
     p = 2 #printing things
